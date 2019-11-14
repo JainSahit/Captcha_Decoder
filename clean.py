@@ -35,7 +35,7 @@ plt.show()
 
 x, y, w, h = 30, 12, 21, 38
 for  i in range(5):
-    #get the bounding rect
+    #get the bounding rect 1233
     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
     cv2.rectangle(thresh6, (x, y), (x + w, y + h), (0, 255, 0), 2)
     cv2.rectangle(opening, (x, y), (x + w, y + h), (0, 255, 0), 2)
