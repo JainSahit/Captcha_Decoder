@@ -16,7 +16,7 @@ for img in os.listdir(data_path):
 print(len(iarr))
 
 training_data = []
-img = cv2.imread("/Users/sahitjain/Desktop/Fall-19/IFT-598/Project/captcha_dataset/samples/wbncw.png", 0)
+img = cv2.imread("/Users/sahitjain/Desktop/Fall-19/IFT-598/Project/captcha_dataset/samples/3ndxd.png.png", 0)
 #img = img[10:, 28:145]
 print(img)
 nIMG = np.array(img)
@@ -26,7 +26,8 @@ new_img = inverted_img / 255.0
 print(new_img)
 
 ret,thresh1 = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
-ret,thresh6 = cv2.threshold(img, 127, 255, cv2.THRESH_OTSU)
+ret, thresh2 = cv2.adaptiveThreshold(thresh1, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+ret,thresh6 = cv2.threshold(thresh2, 127, 255, cv2.THRESH_OTSU)
 dilate1 = cv2.dilate(thresh6, kernel, iterations=1)
 errosion1 = cv2.erode(dilate1, kernel, iterations=1)
 opening = cv2.morphologyEx(errosion1, cv2.MORPH_OPEN, kernel)

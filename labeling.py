@@ -1,8 +1,8 @@
+from sklearn.datasets import load_digits
+import cv2
+
 import numpy as np
-import sys
-import pandas as pd
-
-np.set_printoptions(threshold=sys.maxsize)
-
-pdDF = pd.DataFrame([1,2,2,2])
-print(pdDF)
+digits = load_digits()
+print(digits)
+cv2.imshow("image", digits.images[-1])
+cv2.waitKey(0)

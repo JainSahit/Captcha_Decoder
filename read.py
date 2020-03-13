@@ -21,6 +21,7 @@ def load_images_from_folder(folder):
         img = cv2.imread(os.path.join(folder, imagename), 0)
         if img is not None:
             pic_target.append(imagename[:-4])
+            img1 = img
             img = img[10:, 28:145]
             ret, thresh1 = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY_INV)
             ret, thresh2 = cv2.threshold(thresh1, 127, 255, cv2.THRESH_OTSU)
@@ -29,7 +30,16 @@ def load_images_from_folder(folder):
             opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
             opening = opening / 255.0
             images.append(opening)
+            """
+            titles = ['ORIGINAL IMAGE', 'SIZE REDUCTION', 'BINARY INVERSION', 'OTSU', 'DILATION', 'ERROSION', 'MORPHOLOGICAL OPENING']
+            images = [img1, img, thresh1, thresh2, dilate, erosion, opening]
 
+            for i in range(7):
+                plt.subplot(4, 2, i + 1), plt.imshow(images[i], 'gray')
+                plt.title(titles[i])
+                plt.xticks([]), plt.yticks([])
+            plt.show()
+"""
     return images, pic_target
 
 
@@ -76,26 +86,7 @@ def segment_image(img_arr, label):
         count += 1
 
     return character_img, character_lbl
-
-
 """
-def verticalProjection(img):
-    #"Return a list containing the sum of the pixels in each column"
-    (h, w) = img.shape[:2]
-    sumCols = []
-    for j in range(w):
-        col = img[0:h, j:j + 1]  # y1:y2, x1:x2
-        sumCols.append(np.sum(col))
-    return sumCols
-
-
-def vP(img):
-    image = []
-    for i in range(0, len(img)):
-        image.append(verticalProjection(nY[i]))
-
-    return np.array(image)
-
 
 X, label = load_images_from_folder(data_path)
 
@@ -117,7 +108,6 @@ y_sum = vP(nY)
 
 y_sumReshape = y_sum[:, 1]
 
-
 time_start = time.time()
 tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=300)
 tsne_results = tsne.fit_transform(reY)
@@ -128,24 +118,4 @@ np.save(wd + "labels1", ch_label)
 """
 
 
-"""
-tsne_results = np.load(wd + "trainD1.npy")
-model = dill.load(open(wd + "model1", "rb"))
-Y = model.predict(tsne_results)
-#print(model.cluster_centers_)
-print(Y[726])
-print(model.labels_[726])
 
-
-tst, lbl = load_images_from_folder(test)
-ntst = np.float32(tst)
-ytst, tst_label = segment_image(tst, lbl)
-nytst = np.float32(ytst)
-reYtst = nytst.reshape(len(nytst), -1)
-reYtst = np.int64(reYtst)
-tsne_tst = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=300)
-tsne_results_tst = tsne_tst.fit_transform(reYtst)
-
-Ytst = model.predict(tsne_results_tst)
-print(Ytst)
-"""
